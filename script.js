@@ -185,9 +185,30 @@ const updateUI = function (acc) {
   calcDisplaySummary(acc);
 };
 
+const timerLogout = function () {
+  const tick = function () {
+    const min = String(Math.trunc(time / 60)).padStart(2, 0);
+    const sec = String(time % 60).padStart(2, 0);
+
+    labelTimer.textContent = min + ':' + sec;
+
+    if (time === 0) {
+      clearInterval(timerLog);
+      labelWelcome.textContent = 'Inserisci le tue credenziali ';
+      containerApp.style.opacity = 0;
+    }
+    time--;
+  };
+
+  let time = 300;
+  tick();
+  const timerLog = setInterval(tick, 1000);
+  return timerLog;
+};
+
 ///////////////////////////////////////
 // Event handlers
-let currentAccount;
+let currentAccount, timer;
 
 // const day = `${now.getDate()}`.padStart(2, 0);
 // const month = `${now.getMonth() + 1}`.padStart(2, 0);
@@ -230,6 +251,9 @@ btnLogin.addEventListener('click', function (e) {
     inputLoginUsername.value = inputLoginPin.value = '';
     inputLoginPin.blur();
 
+    if (timer) clearInterval(timer);
+    timer = timerLogout();
+
     // Update UI
     updateUI(currentAccount);
   }
@@ -258,6 +282,10 @@ btnTransfer.addEventListener('click', function (e) {
 
     // Update UI
     updateUI(currentAccount);
+
+    //reset timer
+    clearInterval(timer);
+    timer = timerLogout();
   }
 });
 
@@ -268,13 +296,18 @@ btnLoan.addEventListener('click', function (e) {
 
   if (amount > 0 && currentAccount.movements.some(mov => mov >= amount * 0.1)) {
     // Add movement
-    currentAccount.movements.push(amount);
+    setTimeout(function () {
+      currentAccount.movements.push(amount);
 
-    //Aggiugnere data prestito
-    currentAccount.movementsDates.push(new Date().toISOString());
+      //Aggiugnere data prestito
+      currentAccount.movementsDates.push(new Date().toISOString());
 
-    // Update UI
-    updateUI(currentAccount);
+      // Update UI
+      updateUI(currentAccount);
+      //reset timer
+      clearInterval(timer);
+      timer = timerLogout();
+    }, 2000);
   }
   inputLoanAmount.value = '';
 });
@@ -312,16 +345,3 @@ btnSort.addEventListener('click', function (e) {
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
 // LECTURES
-
-//Se vogliamo formattare un numero secondo un valore in base a come si è abituati a scriverlo in uno stato possiamo usare Intl
-const num = 9898922;
-
-const options = {
-  style: 'unit',
-  unit: 'mile-per-hour',
-};
-
-console.log('US ' + new Intl.NumberFormat('en-US', options).format(num));
-//[Log] US 9,898,922 mph (script.js, line 309)
-console.log('DE ' + new Intl.NumberFormat('de-DE', options).format(num));
-// [Log] DE 9.898.922 mi/h(script.js, line 317)
