@@ -1,13 +1,7 @@
 'use strict';
 
 /////////////////////////////////////////////////
-/////////////////////////////////////////////////
-// BANKIST APP
-
-/////////////////////////////////////////////////
-// Data
-
-// DIFFERENT DATA! Contains movement dates, currency and locale
+// dati esempi
 
 const account1 = {
   owner: 'Jonas Schmedtmann',
@@ -26,7 +20,7 @@ const account1 = {
     '2020-07-12T10:51:36.790Z',
   ],
   currency: 'EUR',
-  locale: 'pt-PT', // de-DE
+  locale: 'pt-PT',
 };
 
 const account2 = {
@@ -52,7 +46,7 @@ const account2 = {
 const accounts = [account1, account2];
 
 /////////////////////////////////////////////////
-// Elements
+// Elementi
 const labelWelcome = document.querySelector('.welcome');
 const labelDate = document.querySelector('.date');
 const labelBalance = document.querySelector('.balance__value');
@@ -210,6 +204,7 @@ const timerLogout = function () {
 // Event handlers
 let currentAccount, timer;
 
+// gia definito se da Err 189-197 utilizzare codice qui sotto
 // const day = `${now.getDate()}`.padStart(2, 0);
 // const month = `${now.getMonth() + 1}`.padStart(2, 0);
 // const year = now.getFullYear();
@@ -341,7 +336,3 @@ btnSort.addEventListener('click', function (e) {
   displayMovements(currentAccount.movements, !sorted);
   sorted = !sorted;
 });
-
-/////////////////////////////////////////////////
-/////////////////////////////////////////////////
-// LECTURES
